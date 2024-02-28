@@ -12,7 +12,7 @@ namespace LinearFeedbackShiftRegister
             LFSR lfsr = new LFSR(register, new int[] { 0, 5, 6 });
             int a = lfsr.Period();
 
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("End of program!");
         }
     }
 }

@@ -31,10 +31,6 @@ namespace LinearFeedbackShiftRegister
                 bitArray.RightShift(1);
                 bitArray[bitArray.Count - 1] = xor;
 
-                if (isEqual(bitArray,primaryBits)) {
-                    break; 
-                }
-
                 Console.Write($"{iteration} :");
                 for (int i = 0; i < bitArray.Length; i++)
                 {
@@ -42,6 +38,11 @@ namespace LinearFeedbackShiftRegister
                     Console.Write(" ");
                 }
                 Console.WriteLine();
+
+                /*
+                if (isEqual(bitArray,primaryBits)) {
+                    break; 
+                }*/
 
                     iteration++;
             }
