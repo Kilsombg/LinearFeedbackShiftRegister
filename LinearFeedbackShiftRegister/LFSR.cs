@@ -12,17 +12,20 @@ namespace LinearFeedbackShiftRegister
         private readonly bool[] primaryRegister;
         private readonly List<int> xorBits;
 
+        public int MaxIterationCheck = 101;
+        public int Period { get; set; } = -1;
+        public bool IsMSEQ { get; set; }
+
         public LFSR(bool[] bitArray, int[] xorBits)
         {
             primaryRegister = bitArray;
             this.xorBits = xorBits.Distinct().ToList();
         }
 
-        public int Period()
+        public int CalculatePeriod()
         {
             BitArray bitArray = new BitArray(primaryRegister);
             BitArray primaryBits = new BitArray(primaryRegister);
-            int maxIteration = 101;
             int iteration = 1;
 
             do
@@ -39,44 +42,62 @@ namespace LinearFeedbackShiftRegister
                 }
                 Console.WriteLine();
 
-                /*
-                if (isEqual(bitArray,primaryBits)) {
-                    break; 
-                }*/
 
-                    iteration++;
+                if (isEqual(bitArray, primaryBits))
+                {
+                    break;
+                }
+
+                iteration++;
             }
-            while (iteration < maxIteration);
+            while (iteration < MaxIterationCheck);
 
-            if(iteration == maxIteration)
+            if (iteration == MaxIterationCheck)
             {
-                return -1;
+                Period = -1;
             }
-            else return iteration;
+            else
+            {
+                Period = iteration;
+            }
+
+            return Period;
         }
 
-        public bool isEqual(BitArray bitArray1, BitArray bitArray2) {
+
+        public bool IsMSequence()
+        {
+            if(Period == -1) return false;
+
+            int m = primaryRegister.Length;
+            IsMSEQ = Period == (Math.Pow(2, m) - 1) ? true : false;
+
+            return IsMSEQ;
+        }
+
+        public bool isEqual(BitArray bitArray1, BitArray bitArray2)
+        {
             bool equal = true;
-            for(int i=0; i<bitArray1.Length; i++)
+            for (int i = 0; i < bitArray1.Length; i++)
             {
-                if (bitArray1[i] != bitArray2[i]) { equal = false;  break; }
+                if (bitArray1[i] != bitArray2[i]) { equal = false; break; }
             }
             return equal;
         }
 
         private bool CalculateXOR(BitArray bitArray)
         {
-            if(xorBits.Count() > bitArray.Length) throw new Exception("incorect bits");
+            if (xorBits.Count() > bitArray.Length) throw new Exception("incorect bits");
 
             BitArray bitArrayXOR = new BitArray(xorBits.Count());
-            for(int i=0; i<bitArrayXOR.Length; i++)
+            for (int i = 0; i < bitArrayXOR.Length; i++)
             {
                 bitArrayXOR[i] = bitArray[xorBits[i]];
             }
 
 
             bool result = false;
-            foreach(bool bit in bitArrayXOR)
+            foreach (bool bit in bitArrayXOR)
             {
                 result ^= bit;
             }
